@@ -37,7 +37,7 @@
             ]
         },
         "test": {
-            "state": "x wins",
+            "state": "win",
             "size": 3,
             "board": [
                 "X", "O", "X",
@@ -46,7 +46,7 @@
             ]
         },
         "test": {
-            "state": "o wins",
+            "state": "win",
             "size": 3,
             "board": [
                 "X", "O", "O",
@@ -95,7 +95,7 @@
             ]
         },
         "test": {
-            "state": "x wins",
+            "state": "win",
             "size": 4,
             "board": [
                 " ", " ", " ", " ",
@@ -105,7 +105,7 @@
             ]
         },
         "test": {
-            "state": "o wins",
+            "state": "win",
             "size": 4,
             "board": [
                 "O", " ", " ", " ",
@@ -130,7 +130,7 @@
             "size": 5,
             "board": [
                 "O", "X", "X", "O", "O",
-                "O", "X", "O", "X", "X",
+                "O", "X", " ", "X", "X",
                 " ", "O", "O", " ", "O",
                 "X", "X", " ", "X", "X",
                 "O", "X", "O", "X", "O"

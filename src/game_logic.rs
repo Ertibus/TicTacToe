@@ -1,30 +1,30 @@
 use std::collections::HashMap;
 
-use fltk::prelude::BrowserExt;
-
 #[derive(Debug, PartialEq)]
 enum GameState {
     Draw,
-    XWins,
-    OWins,
+    Win,
     InProgress,
 }
 
+const VICTORY_CONDITION: u8 = 3;
 struct Game {
     board: HashMap<(u8, u8), char>,
-    game_state: GameState,
+    board_size: u8,
 }
 
 impl Game {
+
     fn new() -> Game {
         Game {
             board: HashMap::new(),
-            game_state: GameState::InProgress,
+            board_size: 0,
         }
     }
 
     fn create_board(&mut self, board_size:u8) {
         self.board.clear();
+        self.board_size = board_size;
         for x in 0..board_size {
             for y in 0..board_size {
                 self.board.insert((x, y), ' ');
@@ -33,7 +33,58 @@ impl Game {
     }
 
     fn check_game_state(&self) -> GameState {
-        unimplemented!()
+        let mut draw: bool = true;
+
+        for x in 0..self.board_size {
+            for y in 0..self.board_size {
+                if self.board.get(&(x, y)).unwrap() == &' ' {
+                    draw = false;
+                    break
+                }
+            }
+            if !draw { break; }
+        }
+        if draw { return GameState::Draw }
+
+        for x in 0..(self.board_size - VICTORY_CONDITION) {
+            for y in 0..self.board_size {
+                if self.board.get(&(x, y)).unwrap() != &' '
+                    && self.board.get(&(x, y)).unwrap() == self.board.get(&(x + 1, y)).unwrap()
+                    && self.board.get(&(x + 1, y)).unwrap() == self.board.get(&(x + 2, y)).unwrap() {
+                    return GameState::Win;
+                }
+            }
+        }
+        for x in 0..self.board_size {
+            for y in 0..(self.board_size - VICTORY_CONDITION) {
+                if self.board.get(&(x, y)).unwrap() != &' '
+                    && self.board.get(&(x, y)).unwrap() == self.board.get(&(x, y + 1)).unwrap()
+                    && self.board.get(&(x, y + 1)).unwrap() == self.board.get(&(x, y + 2)).unwrap() {
+                    return GameState::Win;
+                }
+            }
+        }
+
+        for x in 0..(self.board_size - VICTORY_CONDITION) {
+            for y in 0..(self.board_size - VICTORY_CONDITION) {
+                if self.board.get(&(x, y)).unwrap() != &' '
+                    && self.board.get(&(x, y)).unwrap() == self.board.get(&(x + 1, y + 1)).unwrap()
+                    && self.board.get(&(x + 1, y + 1)).unwrap() == self.board.get(&(x + 2, y + 2)).unwrap() {
+                    return GameState::Win;
+                }
+            }
+        }
+
+        for x in 0..(self.board_size - VICTORY_CONDITION) {
+            for y in 2..self.board_size {
+                if self.board.get(&(x, y)).unwrap() != &' '
+                    && self.board.get(&(x, y)).unwrap() == self.board.get(&(x + 1, y - 1)).unwrap()
+                    && self.board.get(&(x + 1, y - 1)).unwrap() == self.board.get(&(x + 2, y - 2)).unwrap() {
+                    return GameState::Win;
+                }
+            }
+        }
+        GameState::InProgress
     }
 }
 
@@ -70,8 +121,7 @@ mod tests {
             let board_data = entry["board"].as_array().unwrap();
             let state: GameState = match entry["state"].as_str().unwrap() {
                 "in progress" => GameState::InProgress,
-                "x wins" => GameState::XWins,
-                "o wins" => GameState::OWins,
+                "win" => GameState::Win,
                 "draw" => GameState::Draw,
                 _ => panic!("Unidentified game state"),
             };
@@ -85,6 +135,8 @@ mod tests {
                 board.insert((x, y), c);
             }
             game.board = board;
+            game.board_size = board_size;
+            println!("{}", &game.board_size);
             assert_eq!(game.check_game_state(), state);
         }
     }
