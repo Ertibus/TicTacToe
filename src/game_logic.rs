@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
-#[allow(dead_code)]
+use fltk::prelude::BrowserExt;
+
 #[derive(Debug, PartialEq)]
 enum GameState {
     Draw,
@@ -9,13 +10,11 @@ enum GameState {
     InProgress,
 }
 
-#[allow(dead_code)]
 struct Game {
     board: HashMap<(u8, u8), char>,
     game_state: GameState,
 }
 
-#[allow(dead_code)]
 impl Game {
     fn new() -> Game {
         Game {
@@ -25,7 +24,12 @@ impl Game {
     }
 
     fn create_board(&mut self, board_size:u8) {
-        unimplemented!()
+        self.board.clear();
+        for x in 0..board_size {
+            for y in 0..board_size {
+                self.board.insert((x, y), ' ');
+            }
+        }
     }
 
     fn check_game_state(&self) -> GameState {
