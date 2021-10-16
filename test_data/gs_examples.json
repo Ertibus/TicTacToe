@@ -1,0 +1,140 @@
+{
+    "tests": {
+        "test": {
+            "state": "in progress",
+            "size": 3,
+            "board": [
+                " ", " ", " ",
+                " ", " ", " ",
+                " ", " ", " "
+            ]
+        },
+        "test": {
+            "state": "in progress",
+            "size": 3,
+            "board": [
+                "X", "X", "O",
+                " ", " ", " ",
+                " ", " ", "O"
+            ]
+        },
+        "test": {
+            "state": "in progress",
+            "size": 3,
+            "board": [
+                "O", "X", "O",
+                "X", "O", " ",
+                "X", "O", "X"
+            ]
+        },
+        "test": {
+            "state": "draw",
+            "size": 3,
+            "board": [
+                "O", "X", "O",
+                "X", "O", "O",
+                "X", "O", "X"
+            ]
+        },
+        "test": {
+            "state": "x wins",
+            "size": 3,
+            "board": [
+                "X", "O", "X",
+                " ", "X", "O",
+                "X", " ", "O"
+            ]
+        },
+        "test": {
+            "state": "o wins",
+            "size": 3,
+            "board": [
+                "X", "O", "O",
+                " ", "X", "O",
+                "X", " ", "O"
+            ]
+        },
+        "test": {
+            "state": "in progress",
+            "size": 4,
+            "board": [
+                " ", " ", " ", " ",
+                " ", " ", " ", " ",
+                " ", " ", " ", " ",
+                " ", " ", " ", " "
+            ]
+        },
+        "test": {
+            "state": "in progress",
+            "size": 4,
+            "board": [
+                "X", " ", "X", " ",
+                " ", "O", " ", "O",
+                " ", "X", " ", " ",
+                " ", " ", "O", "X"
+            ]
+        },
+        "test": {
+            "state": "in progress",
+            "size": 4,
+            "board": [
+                "X", "O", "X", "X",
+                "X", "O", " ", "O",
+                "O", "X", "X", "O",
+                "X", "X", "O", "X"
+            ]
+        },
+        "test": {
+            "state": "draw",
+            "size": 4,
+            "board": [
+                "X", "X", "O", "O",
+                "O", "O", "X", "X",
+                "X", "X", "O", "O",
+                "O", "O", "X", "X"
+            ]
+        },
+        "test": {
+            "state": "x wins",
+            "size": 4,
+            "board": [
+                " ", " ", " ", " ",
+                "O", "O", "X", "X",
+                "X", "X", "O", "O",
+                "X", " ", " ", " "
+            ]
+        },
+        "test": {
+            "state": "o wins",
+            "size": 4,
+            "board": [
+                "O", " ", " ", " ",
+                "O", "O", "X", "X",
+                "X", "X", "O", "O",
+                "O", " ", " ", " "
+            ]
+        },
+        "test": {
+            "state": "in progress",
+            "size": 5,
+            "board": [
+                " ", " ", " ", " ", " ",
+                " ", " ", " ", " ", " ",
+                " ", " ", " ", " ", " ",
+                " ", " ", " ", " ", " ",
+                " ", " ", " ", " ", " "
+            ]
+        },
+        "test": {
+            "state": "in progress",
+            "size": 5,
+            "board": [
+                "O", "X", "X", "O", "O",
+                "O", "X", "O", "X", "X",
+                " ", "O", "O", " ", "O",
+                "X", "X", " ", "X", "X",
+                "O", "X", "O", "X", "O"
+            ]
+        }
+    }
+}

@@ -1,0 +1,19 @@
+#+TITLE: Programų sistemų testavimas - TicTacToe
+#+DESCRIPTION: Praktinis darbas "TicTacToe" sukurtas naudojant TDD principą ir Rust programavimo kalbą
+#+AUTHOR: Emilis Margevičius
+
+* Užduotis
+Testais pagrįstu programavimo principu (TDD) sukurkite GUI turintį "Kryžiukų-nuliukų" žaidimą, o jo logikai parašykite testavimo atvejus (unit testus).
+Žaidimas turi būti skirtas dviems žaidėjams ir turi leisti pasirinkti žaisti "kryžiukais" ar "nuliukais" (5 taškai).
+
+** Kriterijai:
+*** TODO Žaidimas turi pranešti, kas laimėjo - "kryžiukai" ar "nuliukai", ar lygiosios. Žaidimo logikai parašyti testavimo atvejai (unit testai). (3 taškai)
+*** TODO Turi būti galima dinamiškai pasirinkti žaidimo lentos dydį (3x3, 4x4, 5x5). Žaidimo logikai parašyti testavimo atvejai (unit testai). (3 taškai)
+*** TODO Laimėjimas skelbiamas, jei surinkti 3 "kryžiukai" arba 3 "nuliukai" nepriklausomai nuo žaidimo lentos dydžio. Žaidimo logikai parašyti testavimo atvejai (unit testai). (5 taškai)
+*** TODO Kodas parašytas pagal SOLID principus ir gali būti taikomas praplėsti bet kokiam žaidimo lentos dydžiui (4 taškai).
+
+** TDD programavimo procesas:
+*** Paruošti planą: sukurti dalį klasių diagramos kiekvienai programavimo iteracijai.
+*** Parašykite testus sukurtoms klasėms.
+*** Suprogramuoti klases.
+*** Įvykdyti testus.
