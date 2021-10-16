@@ -1,28 +1,28 @@
 use std::collections::HashMap;
 
 #[derive(Debug, PartialEq)]
-enum GameState {
+pub enum GameState {
     Draw,
     Win,
     InProgress,
 }
 
 const VICTORY_CONDITION: u8 = 3;
-struct Game {
+
+pub struct Game {
     board: HashMap<(u8, u8), char>,
     board_size: u8,
 }
 
 impl Game {
-
-    fn new() -> Game {
+    pub fn new() -> Self {
         Game {
             board: HashMap::new(),
             board_size: 0,
         }
     }
 
-    fn create_board(&mut self, board_size:u8) {
+    pub fn create_board(&mut self, board_size:u8) {
         self.board.clear();
         self.board_size = board_size;
         for x in 0..board_size {
@@ -32,7 +32,11 @@ impl Game {
         }
     }
 
-    fn check_game_state(&self) -> GameState {
+    pub fn player_input(&self, x:u8, y:u8){
+        unimplemented!()
+    }
+
+    pub fn check_game_state(&self) -> GameState {
         let mut draw: bool = true;
 
         for x in 0..self.board_size {
@@ -85,6 +89,12 @@ impl Game {
             }
         }
         GameState::InProgress
+    }
+}
+
+impl Default for Game {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
