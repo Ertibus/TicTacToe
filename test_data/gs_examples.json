@@ -9,6 +9,15 @@
                 " ", " ", " "
             ]
         },
+	"test": {
+            "state": "win",
+            "size": 3,
+            "board": [
+                "X", "O", " ",
+                "O", "X", " ",
+                " ", " ", "X"
+            ]
+        },
         "test": {
             "state": "in progress",
             "size": 3,

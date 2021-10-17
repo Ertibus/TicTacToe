@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+#[derive(Debug, PartialEq)]
 enum Player {
     X,
     O,
@@ -12,11 +13,12 @@ pub enum GameState {
     InProgress,
 }
 
-const VICTORY_CONDITION: u8 = 3;
+const VICTORY_CONDITION: u8 = 2;
 
 pub struct Game {
     board: HashMap<(u8, u8), char>,
     board_size: u8,
+    player: Player,
 }
 
 impl Game {
@@ -24,6 +26,7 @@ impl Game {
         Game {
             board: HashMap::new(),
             board_size: 0,
+            player: Player::X,
         }
     }
 
@@ -37,8 +40,21 @@ impl Game {
         }
     }
 
-    pub fn player_input(&self, x:u8, y:u8) -> GameState{
-        unimplemented!()
+    pub fn player_input(&mut self, x:u8, y:u8) -> GameState{
+        let c: &char;
+        if self.player == Player::X {
+            c = &'X';
+            self.player = Player::O;
+        } else {
+            c = &'O';
+            self.player = Player::X;
+        }
+
+        if let Some(b) = self.board.get_mut(&(x, y)) {
+            *b = *c;
+        }
+
+        self.check_game_state()
     }
 
     pub fn check_game_state(&self) -> GameState {
@@ -125,11 +141,10 @@ mod tests {
     fn test_player_input() {
         let mut game = Game::new();
         game.create_board(3);
-        let board = &game.board;
         assert_eq!(game.player_input(0, 0), GameState::InProgress);
-        assert_eq!(game.player_input(1, 0), GameState::InProgress);
-        assert_eq!(game.player_input(1, 1), GameState::InProgress);
         assert_eq!(game.player_input(0, 1), GameState::InProgress);
+        assert_eq!(game.player_input(1, 1), GameState::InProgress);
+        assert_eq!(game.player_input(1, 0), GameState::InProgress);
         assert_eq!(game.player_input(2, 2), GameState::Win);
     }
 
