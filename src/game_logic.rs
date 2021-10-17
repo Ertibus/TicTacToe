@@ -1,5 +1,10 @@
 use std::collections::HashMap;
 
+enum Player {
+    X,
+    O,
+}
+
 #[derive(Debug, PartialEq)]
 pub enum GameState {
     Draw,
@@ -32,7 +37,7 @@ impl Game {
         }
     }
 
-    pub fn player_input(&self, x:u8, y:u8){
+    pub fn player_input(&self, x:u8, y:u8) -> GameState{
         unimplemented!()
     }
 
@@ -114,6 +119,18 @@ mod tests {
             let board = &game.board;
             assert_eq!((board.len() as u8), x * x)
         }
+    }
+
+    #[test]
+    fn test_player_input() {
+        let mut game = Game::new();
+        game.create_board(3);
+        let board = &game.board;
+        assert_eq!(game.player_input(0, 0), GameState::InProgress);
+        assert_eq!(game.player_input(1, 0), GameState::InProgress);
+        assert_eq!(game.player_input(1, 1), GameState::InProgress);
+        assert_eq!(game.player_input(0, 1), GameState::InProgress);
+        assert_eq!(game.player_input(2, 2), GameState::Win);
     }
 
     #[test]
