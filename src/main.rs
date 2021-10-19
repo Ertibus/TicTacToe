@@ -1,12 +1,11 @@
-use std::borrow::{Borrow, BorrowMut};
+use std::{collections::HashMap, slice::SliceIndex};
 
 use game_logic::Game;
-use iced::{Align, Application, Button, Column, Command, Element, Executor, Length, Settings, Text, button, executor};
+use iced::{Align, Application, Button, Column, Command, Container, Element, Executor, Length, Row, Settings, Text, button, executor};
 mod game_logic;
 
 
-const WINDOW_SIZE_X: i32 = 400;
-const WINDOW_SIZE_Y: i32 = 600;
+const BIGGEST_BOARD: u8 = 6;
 
 fn main() {
     UserInterface::run(Settings::default()).expect("Failed to start the application");
@@ -45,6 +44,7 @@ struct UserInterface {
     game: Game,
     system_text: String,
     state: AppState,
+    game_grid: Vec<GameSquare>
 }
 
 impl Application for UserInterface {
@@ -65,6 +65,7 @@ impl Application for UserInterface {
                 },
                 game: Game::new(),
                 system_text: String::from("Select board size to start the game"),
+                game_grid: Vec::new()
             },
             Command::none()
         )
@@ -110,6 +111,15 @@ impl Application for UserInterface {
             Message::CreateGame(s) => {
                 self.board_size = s;
                 self.game.create_board(s);
+
+                self.game_grid.clear();
+
+                for x in 0..s {
+                    for y in 0..s {
+                        self.game_grid.push(GameSquare::new(x, y));
+                    }
+                }
+
                 let winner: char = self.game.get_next_player_symbol();
                 let mut text: String = String::from(winner.to_string());
                 text.push_str(" turn!");
@@ -135,6 +145,18 @@ impl Application for UserInterface {
         let system_label = Text::new(&self.system_text).width(Length::Fill).size(16);
         match &mut self.state {
             AppState::Playing { reset_button } => {
+
+                let t = self.game_grid.iter_mut().fold(Row::new(), |row, sq| {
+                    row.push(
+                        sq.view().map(move |message| {
+                            match message {
+                                SquareMessage::Clicked(x, y) => {
+                                    Message::PlaceSymbol(x, y)
+                                },
+                            }
+                        })
+                    )});
+
                 Column::new()
                     .align_items(Align::Center)
                     .push(
@@ -142,6 +164,7 @@ impl Application for UserInterface {
                             .on_press(Message::Reset)
                             .width(Length::Fill)
                     )
+                    .push(t)
                     .push(system_label)
                     .into()
             },
@@ -151,17 +174,14 @@ impl Application for UserInterface {
                     .push(
                         Button::new(new_3_game_button, Text::new("3x3"))
                             .on_press(Message::CreateGame(3))
-                            .width(Length::Fill)
                     )
                     .push(
                         Button::new(new_4_game_button, Text::new("4x4"))
                             .on_press(Message::CreateGame(4))
-                            .width(Length::Fill)
                     )
                     .push(
                         Button::new(new_5_game_button, Text::new("5x5"))
                             .on_press(Message::CreateGame(5))
-                            .width(Length::Fill)
                     )
                     .push(system_label)
                     .into()
@@ -173,6 +193,67 @@ impl Application for UserInterface {
 
 }
 
+#[derive(Debug, Clone)]
+pub struct GameSquare {
+    state: SquareState,
+    clickable: bool,
+    owner: char,
+    x: u8,
+    y: u8,
+    btn: button::State,
+}
+
+#[derive(Debug, Clone)]
+enum SquareState {
+    Free,
+    Clicked,
+}
+
+impl Default for SquareState {
+    fn default() -> Self {
+        SquareState::Free {}
+    }
+}
+
+#[derive(Debug, Clone)]
+enum SquareMessage {
+    Clicked(u8, u8),
+}
+
+impl GameSquare {
+    fn new(x: u8, y: u8) -> Self {
+        GameSquare {
+            state: SquareState::Free,
+            clickable: true,
+            btn: button::State::new(),
+            owner: ' ',
+            x,
+            y,
+        }
+    }
+
+    fn update(&mut self, message: SquareMessage) {
+        match message {
+            SquareMessage::Clicked(x, y) => {
+                self.state = SquareState::Clicked;
+                self.clickable = false;
+            },
+        }
+    }
+
+    fn view(&mut self) -> Element<SquareMessage> {
+        match &mut self.state {
+            SquareState::Free => {
+                Button::new(&mut self.btn, Text::new(" "))
+                    .on_press(SquareMessage::Clicked(self.x, self.y))
+                    .into()
+            },
+            SquareState::Clicked => {
+                Button::new(&mut self.btn, Text::new(self.owner.to_string())).into()
+            },
+        }
+    }
+}
 /*
     fn run() {
         let app = app::App::default();

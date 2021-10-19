@@ -16,7 +16,7 @@ pub enum GameState {
 const VICTORY_CONDITION: u8 = 2;
 
 pub struct Game {
-    board: HashMap<(u8, u8), char>,
+    pub board: HashMap<(u8, u8), char>,
     board_size: u8,
     player: Player,
 }
