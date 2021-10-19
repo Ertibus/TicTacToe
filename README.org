@@ -7,9 +7,9 @@ Testais pagrįstu programavimo principu (TDD) sukurkite GUI turintį "Kryžiukų
 Žaidimas turi būti skirtas dviems žaidėjams ir turi leisti pasirinkti žaisti "kryžiukais" ar "nuliukais" (5 taškai).
 
 ** Kriterijai:
-*** TODO Žaidimas turi pranešti, kas laimėjo - "kryžiukai" ar "nuliukai", ar lygiosios. Žaidimo logikai parašyti testavimo atvejai (unit testai). (3 taškai)
+*** Žaidimas turi pranešti, kas laimėjo - "kryžiukai" ar "nuliukai", ar lygiosios. Žaidimo logikai parašyti testavimo atvejai (unit testai). (3 taškai)
 *** Turi būti galima dinamiškai pasirinkti žaidimo lentos dydį (3x3, 4x4, 5x5). Žaidimo logikai parašyti testavimo atvejai (unit testai). (3 taškai)
-*** TODO Laimėjimas skelbiamas, jei surinkti 3 "kryžiukai" arba 3 "nuliukai" nepriklausomai nuo žaidimo lentos dydžio. Žaidimo logikai parašyti testavimo atvejai (unit testai). (5 taškai)
+*** Laimėjimas skelbiamas, jei surinkti 3 "kryžiukai" arba 3 "nuliukai" nepriklausomai nuo žaidimo lentos dydžio. Žaidimo logikai parašyti testavimo atvejai (unit testai). (5 taškai)
 *** Kodas parašytas pagal SOLID principus ir gali būti taikomas praplėsti bet kokiam žaidimo lentos dydžiui (4 taškai).
 
 ** TDD programavimo procesas:

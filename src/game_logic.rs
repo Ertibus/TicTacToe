@@ -30,6 +30,20 @@ impl Game {
         }
     }
 
+    pub fn get_next_player_symbol(&self) -> char {
+        match self.player {
+            Player::X => 'X',
+            Player::O => 'O',
+        }
+    }
+
+    pub fn get_prev_player_symbol(&self) -> char {
+        match self.player {
+            Player::X => 'O',
+            Player::O => 'X',
+        }
+    }
+
     pub fn create_board(&mut self, board_size:u8) {
         self.board.clear();
         self.board_size = board_size;
