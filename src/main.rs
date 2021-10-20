@@ -1,14 +1,20 @@
-use std::{collections::HashMap, slice::SliceIndex};
-
 use game_logic::Game;
-use iced::{Align, Application, Button, Column, Command, Container, Element, Executor, HorizontalAlignment, Length, Row, Settings, Text, button, executor};
+use iced::{Align, Application, Button, Column, Command, Element, HorizontalAlignment, Length, Row, Settings, Text, button, executor, window};
 mod game_logic;
 
-
-const BIGGEST_BOARD: u8 = 6;
+const WINDOW_SIZE_X: u32 = 400;
+const WINDOW_SIZE_Y: u32 = 600;
 
 fn main() {
-    UserInterface::run(Settings::default()).expect("Failed to start the application");
+    UserInterface::run(Settings {
+        window: window::Settings {
+            size: (WINDOW_SIZE_X, WINDOW_SIZE_Y),
+            min_size: Some((WINDOW_SIZE_X, WINDOW_SIZE_Y)),
+            ..window::Settings::default()
+        },
+        antialiasing: true,
+        ..Settings::default()
+    }).expect("Failed to start the application");
 }
 
 enum AppState {
@@ -44,7 +50,6 @@ struct UserInterface {
     game: Game,
     system_text: String,
     state: AppState,
-    game_grid: Vec<Vec<GameSquare>>,
 }
 
 impl Application for UserInterface {
@@ -54,7 +59,7 @@ impl Application for UserInterface {
 
     type Flags = ();
 
-    fn new(flags: Self::Flags) -> (Self, Command<Self::Message>) {
+    fn new(_flags: Self::Flags) -> (Self, Command<Self::Message>) {
         (
             UserInterface {
                 board_size: 3,
@@ -65,17 +70,6 @@ impl Application for UserInterface {
                 },
                 game: Game::new(),
                 system_text: String::from("Select board size to start the game"),
-                game_grid: {
-                    let mut map = Vec::new();
-                    for x in 0..10 {
-                        let mut row = Vec::new();
-                        for y in 0..10 {
-                            row.push(GameSquare::new(x, y));
-                        }
-                        map.push(row);
-                    }
-                    map
-                }
             },
             Command::none()
         )
@@ -162,27 +156,6 @@ impl Application for UserInterface {
                         ).padding(16)
                     )
                     .push(system_label)
-                    .push(
-                        Row::new()
-                            .push(
-                                self.game_grid.clone()
-                                    .into_iter()
-                                    .enumerate()
-                                    .fold(Column::new(), |clm, (i, x)| {
-                                        clm.push(
-                                            x.into_iter()
-                                                .enumerate()
-                                                .fold(Row::new(), |row, (j, y)| {
-                                                    row.push(
-                                                        y.view().map(move |message| {
-                                                            Message::PlaceSymbol(i as u8, j as u8)
-                                                        })
-                                                    )
-                                                })
-                                        )
-                                })
-                            )
-                    )
                     .width(Length::Fill)
                     .align_items(Align::Center)
                     .into()
@@ -222,103 +195,4 @@ impl Application for UserInterface {
             },
         }
     }
-
-
-
 }
-
-#[derive(Debug, Clone)]
-pub struct GameSquare {
-    state: SquareState,
-    clickable: bool,
-    owner: char,
-    x: u8,
-    y: u8,
-    btn: button::State,
-}
-
-#[derive(Debug, Clone)]
-enum SquareState {
-    Free,
-    Clicked,
-}
-
-impl Default for SquareState {
-    fn default() -> Self {
-        SquareState::Free {}
-    }
-}
-
-#[derive(Debug, Clone)]
-enum SquareMessage {
-    Clicked(u8, u8),
-}
-
-impl GameSquare {
-    fn new(x: u8, y: u8) -> Self {
-        GameSquare {
-            state: SquareState::Free,
-            clickable: true,
-            btn: button::State::new(),
-            owner: ' ',
-            x,
-            y,
-        }
-    }
-
-    fn update(&mut self, message: SquareMessage) {
-        match message {
-            SquareMessage::Clicked(x, y) => {
-                self.state = SquareState::Clicked;
-                self.clickable = false;
-            },
-        }
-    }
-
-    fn view(&mut self) -> Element<SquareMessage> {
-        match &mut self.state {
-            SquareState::Free => {
-                Button::new(&mut self.btn, Text::new(" "))
-                    .on_press(SquareMessage::Clicked(self.x, self.y))
-                    .into()
-            },
-            SquareState::Clicked => {
-                Button::new(&mut self.btn, Text::new(self.owner.to_string())).into()
-            },
-        }
-    }
-}
-/*
-    fn run() {
-        let app = app::App::default();
-        let mut wind = Window::default().with_size(WINDOW_SIZE_X, WINDOW_SIZE_Y).with_label("PD2 TicTacToe");
-        //let mut frame = Frame::default().with_size(200, 100).center_of(&wind);
-
-        let board_size = 3;
-
-        let board_offset_x: i32 = ((WINDOW_SIZE_X as f32) / 2.0 - 72.0 * (board_size as f32) / 2.0).ceil() as i32;
-        let board_offset_y: i32 = ((WINDOW_SIZE_Y as f32) / 2.0 - 72.0 * (board_size as f32) / 2.0).ceil() as i32;
-        let mut game: Game = Game::new();
-
-        for x in 0..board_size {
-            for y in 0..board_size {
-                let mut but = Button::new(board_offset_x + 72 * x, board_offset_y + 72 * y, 64, 64, "0");
-
-
-                but.set_callback(move |b| {
-                    let xc = (x as u8).clone();
-                    let yc = (y as u8).clone();
-                    b.set_label("X");
-                });
-            }
-        }
-
-        wind.end();
-        wind.show();
-
-        app.run().unwrap();
-    }
-
-    fn on_button_press(x: u8, y: u8) {
-    }
-*/
