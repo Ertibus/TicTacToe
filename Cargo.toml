@@ -1,6 +1,6 @@
 [package]
 name = "testavimas_tictactoe"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Emilis Margevičius <s034932@ad.viko.lt>"]
 edition = "2018"
 

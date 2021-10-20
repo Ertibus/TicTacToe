@@ -2187,7 +2187,7 @@ dependencies = [
 
 [[package]]
 name = "testavimas_tictactoe"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "iced",
  "serde_json",
