@@ -1,7 +1,7 @@
 use std::{collections::HashMap, slice::SliceIndex};
 
 use game_logic::Game;
-use iced::{Align, Application, Button, Column, Command, Container, Element, Executor, Length, Row, Settings, Text, button, executor};
+use iced::{Align, Application, Button, Column, Command, Container, Element, Executor, HorizontalAlignment, Length, Row, Settings, Text, button, executor};
 mod game_logic;
 
 
@@ -44,7 +44,7 @@ struct UserInterface {
     game: Game,
     system_text: String,
     state: AppState,
-    game_grid: Vec<GameSquare>
+    game_grid: Vec<Vec<GameSquare>>,
 }
 
 impl Application for UserInterface {
@@ -65,7 +65,17 @@ impl Application for UserInterface {
                 },
                 game: Game::new(),
                 system_text: String::from("Select board size to start the game"),
-                game_grid: Vec::new()
+                game_grid: {
+                    let mut map = Vec::new();
+                    for x in 0..10 {
+                        let mut row = Vec::new();
+                        for y in 0..10 {
+                            row.push(GameSquare::new(x, y));
+                        }
+                        map.push(row);
+                    }
+                    map
+                }
             },
             Command::none()
         )
@@ -112,14 +122,6 @@ impl Application for UserInterface {
                 self.board_size = s;
                 self.game.create_board(s);
 
-                self.game_grid.clear();
-
-                for x in 0..s {
-                    for y in 0..s {
-                        self.game_grid.push(GameSquare::new(x, y));
-                    }
-                }
-
                 let winner: char = self.game.get_next_player_symbol();
                 let mut text: String = String::from(winner.to_string());
                 text.push_str(" turn!");
@@ -142,48 +144,80 @@ impl Application for UserInterface {
     }
 
     fn view(&mut self) -> Element<Message> {
-        let system_label = Text::new(&self.system_text).width(Length::Fill).size(16);
+        let system_label = Text::new(&self.system_text)
+            .horizontal_alignment(HorizontalAlignment::Center)
+            .size(36);
+
         match &mut self.state {
             AppState::Playing { reset_button } => {
-
-                let t = self.game_grid.iter_mut().fold(Row::new(), |row, sq| {
-                    row.push(
-                        sq.view().map(move |message| {
-                            match message {
-                                SquareMessage::Clicked(x, y) => {
-                                    Message::PlaceSymbol(x, y)
-                                },
-                            }
-                        })
-                    )});
-
                 Column::new()
-                    .align_items(Align::Center)
                     .push(
-                        Button::new(reset_button, Text::new("Reset"))
-                            .on_press(Message::Reset)
-                            .width(Length::Fill)
+                        Row::new().push(
+                            Button::new(reset_button,
+                                        Text::new("Reset")
+                                        .horizontal_alignment(HorizontalAlignment::Center)
+                                        .size(32)
+                            )
+                                .on_press(Message::Reset)
+                        ).padding(16)
                     )
-                    .push(t)
                     .push(system_label)
+                    .push(
+                        Row::new()
+                            .push(
+                                self.game_grid.clone()
+                                    .into_iter()
+                                    .enumerate()
+                                    .fold(Column::new(), |clm, (i, x)| {
+                                        clm.push(
+                                            x.into_iter()
+                                                .enumerate()
+                                                .fold(Row::new(), |row, (j, y)| {
+                                                    row.push(
+                                                        y.view().map(move |message| {
+                                                            Message::PlaceSymbol(i as u8, j as u8)
+                                                        })
+                                                    )
+                                                })
+                                        )
+                                })
+                            )
+                    )
+                    .width(Length::Fill)
+                    .align_items(Align::Center)
                     .into()
             },
             AppState::GameOver { new_3_game_button, new_4_game_button, new_5_game_button } => {
                 Column::new()
-                    .align_items(Align::Center)
                     .push(
-                        Button::new(new_3_game_button, Text::new("3x3"))
-                            .on_press(Message::CreateGame(3))
-                    )
-                    .push(
-                        Button::new(new_4_game_button, Text::new("4x4"))
-                            .on_press(Message::CreateGame(4))
-                    )
-                    .push(
-                        Button::new(new_5_game_button, Text::new("5x5"))
-                            .on_press(Message::CreateGame(5))
+                        Row::new().push(
+                            Button::new(new_3_game_button,
+                                        Text::new("3x3")
+                                        .horizontal_alignment(HorizontalAlignment::Center)
+                                        .size(32)
+                            )
+                                .on_press(Message::CreateGame(3))
+                        )
+                        .push(
+                            Button::new(new_4_game_button,
+                                        Text::new("4x4")
+                                        .horizontal_alignment(HorizontalAlignment::Center)
+                                        .size(32)
+                            )
+                                .on_press(Message::CreateGame(4))
+                        )
+                        .push(
+                            Button::new(new_5_game_button,
+                                        Text::new("5x5")
+                                        .horizontal_alignment(HorizontalAlignment::Center)
+                                        .size(32)
+                            )
+                                .on_press(Message::CreateGame(5))
+                        ).padding(16)
                     )
                     .push(system_label)
+                    .width(Length::Fill)
+                    .align_items(Align::Center)
                     .into()
             },
         }
