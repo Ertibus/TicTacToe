@@ -160,6 +160,7 @@ mod tests {
         assert_eq!(game.player_input(1, 1), GameState::InProgress);
         assert_eq!(game.player_input(1, 0), GameState::InProgress);
         assert_eq!(game.player_input(2, 2), GameState::Win);
+        assert_eq!(game.get_prev_player_symbol(), 'X');
     }
 
     #[test]
